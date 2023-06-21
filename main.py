@@ -118,7 +118,7 @@ def main(argv):
     time.sleep(0.500)
     
     for floor in floors:
-      if floor != elevator.requested_floors[-1]: # Prevent requesting the what is recently queued 
+      if floor != elevator.requested_floors[-1]: # Prevent requesting the floor that is recently queued 
         current_requested_floors = elevator.requested_floors #elevator.requested_floors = elevator.requested_floors.append(floor)
         current_requested_floors.extend([floor])
         elevator.requested_floors = current_requested_floors
