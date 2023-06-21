@@ -7,9 +7,14 @@ import time
 SINGLE_FLOOR_TRAVEL_TIME = 10
 
 class Elevator: 
-  def __init__(self):
+  def __init__(self, requested_floors, current_floor, floors_visited_in_order, floors_traversed_in_order):
     self.single_floor_travel_time = SINGLE_FLOOR_TRAVEL_TIME
     self.total_travel_time = 0
+    self._requested_floors = requested_floors
+    self._current_floor = current_floor
+    self._floors_visited_in_order = floors_visited_in_order
+    self._floors_traversed_in_order = floors_traversed_in_order
+    
     
   @property
   def current_floor(self):
@@ -56,7 +61,6 @@ class Elevator:
     traversed_floor = str(new_traversed_floor_list[-1])
     print(Fore.BLACK + '[ElevatorMovement] ' + Style.RESET_ALL + 'Elevator has added ' + numerical_color_coding('Floor ' + traversed_floor) + ' to list of all visited floors')
     self._floors_traversed_in_order = new_traversed_floor_list
-
     
 def parse_argv(argv):
   set_output_file = False
@@ -109,11 +113,11 @@ def main(argv):
       sys.exit()
     
     elevator_start = floors.pop(0)
-    elevator = Elevator()
-    elevator.requested_floors = [elevator_start]
-    elevator.floors_visited_in_order = [elevator_start]
-    elevator.floors_traversed_in_order = [elevator_start]
-    elevator.current_floor = elevator_start
+    elevator = Elevator([elevator_start], elevator_start, [elevator_start], [elevator_start])
+    #elevator.requested_floors = [elevator_start]
+    #elevator.current_floor = elevator_start
+    #elevator.floors_visited_in_order = [elevator_start]
+    #elevator.floors_traversed_in_order = [elevator_start]
     print(Fore.GREEN + 'This is the pre-boarding announcement for Floor ' + numerical_color_coding(str(elevator_start)) + Style.RESET_ALL)
     time.sleep(1.000)
     
