@@ -88,17 +88,17 @@ def parse_argv(argv):
 def move_elevator(elevator: Elevator):
   while elevator.current_floor != elevator.requested_floors[-1]:
     if elevator.current_floor < elevator.requested_floors[-1]:
-      elevator.total_travel_time += elevator.single_floor_travel_time
       elevator.current_floor += 1
-      elevator.floors_traversed_in_order.append(elevator.current_floor)
-      time.sleep(0.200)
-      print(Fore.BLACK + '[ElevatorMovement] ' + Fore.YELLOW + "Moving up to floor " + str(elevator.current_floor) + Style.RESET_ALL)
-    elif elevator.current_floor > elevator.requested_floors[-1]:
       elevator.total_travel_time += elevator.single_floor_travel_time
-      elevator.current_floor -= 1
       elevator.floors_traversed_in_order.append(elevator.current_floor)
+      print(Fore.BLACK + '[ElevatorMovement] ' + Fore.YELLOW + "Moving up to floor " + str(elevator.current_floor) + Style.RESET_ALL)
       time.sleep(0.200)
+    elif elevator.current_floor > elevator.requested_floors[-1]:
+      elevator.current_floor -= 1
+      elevator.total_travel_time += elevator.single_floor_travel_time
+      elevator.floors_traversed_in_order.append(elevator.current_floor)
       print(Fore.BLACK + '[ElevatorMovement] ' + Fore.YELLOW + "Moving down to floor " + str(elevator.current_floor) + Style.RESET_ALL)
+      time.sleep(0.200)
     
 def numerical_color_coding(message: str):
     return Fore.LIGHTMAGENTA_EX + message + Style.RESET_ALL
@@ -119,17 +119,15 @@ def main(argv):
     elevator.floors_traversed_in_order = [elevator_start]
     elevator.current_floor = elevator_start
     print(Fore.GREEN + 'This is the pre-boarding announcement for Floor ' + numerical_color_coding(str(elevator_start)) + Style.RESET_ALL)
-    
+    time.sleep(0.500)
     
     for floor in floors:
-      
-      if floor != elevator.requested_floors[-1]: 
+      if floor != elevator.requested_floors[-1]: # Prevent requesting the what is recently queued 
         current_requested_floors = elevator.requested_floors #elevator.requested_floors = elevator.requested_floors.append(floor)
         current_requested_floors.extend([floor])
         elevator.requested_floors = current_requested_floors
         del current_requested_floors
         
-        #Calculate travel time
         move_elevator(elevator)
         
         current_visited_floors = elevator.floors_visited_in_order #elevator.floors_visited_in_order = elevator.floors_visited_in_order.append(floor)
@@ -137,25 +135,24 @@ def main(argv):
         elevator.floors_visited_in_order = current_visited_floors
         del current_visited_floors
         
-        """
-        current_traversed_floors = elevator.floors_traversed_in_order #elevator.floors_traversed_in_order = elevator.floors_traversed_in_order.append(floor)
-        current_traversed_floors.extend([floor])
-        elevator.floors_traversed_in_order = current_traversed_floors
-        del current_traversed_floors
-        """
-        
         elevator.current_floor = floor
         print(Fore.GREEN + 'This is the pre-boarding announcement for Floor ' + str(floor) + Style.RESET_ALL)
+        time.sleep(0.500)
     
     if output_file:
       with open(output_file, 'a') as output_stream:
         output_stream.write(str(elevator.total_travel_time))
         output_stream.write(str(elevator.floors_visited_in_order))
         output_stream.write(str(elevator.floors_traversed_in_order))
-    else:
-      print(elevator.total_travel_time)
-      print(elevator.floors_visited_in_order)
-      print(elevator.floors_traversed_in_order)
+        output_stream.write('\n')
+      
+    #return (elevator.total_travel_time, elevator.floors_visited_in_order)
+    #return (elevator.total_travel_time, elevator.floors_visited_in_order, elevator.floors_traversed_in_order)
+    print(Fore.LIGHTBLACK_EX + 'Total travel time: ' + Fore.LIGHTGREEN_EX + str(elevator.total_travel_time) + Style.RESET_ALL)
+    print(Fore.LIGHTBLACK_EX + 'Floors visited in order: ' + Fore.LIGHTGREEN_EX + str(elevator.floors_visited_in_order) + Style.RESET_ALL)
+    print(Fore.LIGHTBLACK_EX + 'Floors traversed in order: ' + Fore.LIGHTGREEN_EX + str(elevator.floors_traversed_in_order) + Style.RESET_ALL)
     
 if __name__ == '__main__':
+  #total_travel_time, floors_visited_in_order, floors_traversed_in_order = main(sys.argv[1:])
   main(sys.argv[1:])
+  
