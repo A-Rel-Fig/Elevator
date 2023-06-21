@@ -115,7 +115,7 @@ def main(argv):
     elevator.floors_traversed_in_order = [elevator_start]
     elevator.current_floor = elevator_start
     print(Fore.GREEN + 'This is the pre-boarding announcement for Floor ' + numerical_color_coding(str(elevator_start)) + Style.RESET_ALL)
-    time.sleep(0.500)
+    time.sleep(1.000)
     
     for floor in floors:
       if floor != elevator.requested_floors[-1]: # Prevent requesting the floor that is recently queued 
@@ -133,14 +133,11 @@ def main(argv):
         
         elevator.current_floor = floor
         print(Fore.GREEN + 'This is the pre-boarding announcement for Floor ' + str(floor) + Style.RESET_ALL)
-        time.sleep(0.500) # Simulate onboarding and offboarding passengers
+        time.sleep(1.000) # Simulate onboarding and offboarding passengers
     
     if output_file:
       with open(output_file, 'a') as output_stream:
-        output_stream.write(str(elevator.total_travel_time))
-        output_stream.write(str(elevator.floors_visited_in_order))
-        output_stream.write(str(elevator.floors_traversed_in_order))
-        output_stream.write('\n')
+        output_stream.write('{} {} {} \n'.format(str(elevator.total_travel_time), str(elevator.floors_visited_in_order), str(elevator.floors_traversed_in_order)))
       
     print(Fore.LIGHTBLACK_EX + 'Total travel time: ' + Fore.LIGHTGREEN_EX + str(elevator.total_travel_time) + Style.RESET_ALL)
     print(Fore.LIGHTBLACK_EX + 'Floors visited in order: ' + Fore.LIGHTGREEN_EX + str(elevator.floors_visited_in_order) + Style.RESET_ALL)
